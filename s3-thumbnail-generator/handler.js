@@ -40,56 +40,56 @@ exports.handler = function (event, context, callback) {
 
     // Download the image from S3, transform, and upload under new key.
     async.waterfall([
-            function download(next) {
-                // Download the image from S3 into a buffer.
-                s3.getObject({
-                    'Bucket': "sigma-s3-thumb-input",
-                    'Key': srcKey
-                }, next);
-            },
-            function transform(response, next) {
-                gm(response.Body).size(function (err, size) {
-                    // Infer the scaling factor to avoid stretching the image unnaturally.
-                    let scalingFactor = Math.min(
-                        MAX_WIDTH / size.width,
-                        MAX_HEIGHT / size.height
-                    );
-                    let width = scalingFactor * size.width;
-                    let height = scalingFactor * size.height;
+        function download(next) {
+            // Download the image from S3 into a buffer.
+            s3.getObject({
+                'Bucket': "sigma-s3-thumb-input",
+                'Key': srcKey
+            }, next);
+        },
+        function transform(response, next) {
+            gm(response.Body).size(function (err, size) {
+                // Infer the scaling factor to avoid stretching the image unnaturally.
+                let scalingFactor = Math.min(
+                    MAX_WIDTH / size.width,
+                    MAX_HEIGHT / size.height
+                );
+                let width = scalingFactor * size.width;
+                let height = scalingFactor * size.height;
 
-                    // Transform the image buffer in memory.
-                    this.resize(width, height)
-                        .toBuffer(imageType, function (err, buffer) {
-                            if (err) {
-                                next(err);
-                            } else {
-                                next(null, response.ContentType, buffer);
-                            }
-                        });
-                });
-            },
-            function upload(contentType, data, next) {
-                // Stream the transformed image to a different S3 bucket.
-                s3.putObject({
-                    "Body": data,
-                    "Bucket": "sigma-s3-thumb-output",
-                    "Key": dstKey,
-                    "ACL": "public-read",
-                    "Metadata": {
-                        "Content-Type": contentType
-                    }
-                }, next);
-            }
-        ], function (err) {
-            let msg;
-            if (err) {
-                msg = `Unable to resize sigma-s3-thumb-input/${srcKey} and upload to sigma-s3-thumb-output/${dstKey} due to an error: ${err}`;
-                console.error(msg);
-            } else {
-                msg = `Successfully resized sigma-s3-thumb-input/${srcKey} and uploaded to sigma-s3-thumb-output/${dstKey}`;
-                console.log(msg);
-            }
-            callback(err, msg);
+                // Transform the image buffer in memory.
+                this.resize(width, height)
+                    .toBuffer(imageType, function (err, buffer) {
+                        if (err) {
+                            next(err);
+                        } else {
+                            next(null, response.ContentType, buffer);
+                        }
+                    });
+            });
+        },
+        function upload(contentType, data, next) {
+            // Stream the transformed image to a different S3 bucket.
+            s3.putObject({
+                "Body": data,
+                "Bucket": "sigma-s3-thumb-output",
+                "Key": dstKey,
+                "ACL": "public-read",
+                "Metadata": {
+                    "Content-Type": contentType
+                }
+            }, next);
         }
+    ], function (err) {
+        let msg;
+        if (err) {
+            msg = `Unable to resize sigma-s3-thumb-input/${srcKey} and upload to sigma-s3-thumb-output/${dstKey} due to an error: ${err}`;
+            console.error(msg);
+        } else {
+            msg = `Successfully resized sigma-s3-thumb-input/${srcKey} and uploaded to sigma-s3-thumb-output/${dstKey}`;
+            console.log(msg);
+        }
+        callback(err, msg);
+    }
     );
 };
