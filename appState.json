@@ -24,7 +24,7 @@
         "filePath": "s3-thumbnail-generator/handler.js",
         "triggers": [
           {
-            "resourceName": "s3sigmaS3ThumbInput",
+            "resourceName": "s3sigmaS3ThumbInputUdith",
             "config": {
               "type": "s3:ObjectCreated:*",
               "keyPrefix": "",
@@ -32,7 +32,7 @@
             }
           },
           {
-            "resourceName": "s3sigmaS3ThumbInput",
+            "resourceName": "s3sigmaS3ThumbInputUdith",
             "config": {
               "type": "s3:ObjectCreated:*",
               "keyPrefix": "",
@@ -48,7 +48,7 @@
           "layers": []
         },
         "cursor": {
-          "lineNumber": 69,
+          "lineNumber": 1,
           "column": 1
         }
       }
@@ -58,28 +58,27 @@
     ],
     "currentFileId": "702971c8-fa81-4c9f-9935-f46156b62d1d",
     "resources": {
-      "s3sigmaS3ThumbInput": {
-        "name": "s3sigmaS3ThumbInput",
+      "s3sigmaS3ThumbOutputUdith": {
+        "name": "s3sigmaS3ThumbOutputUdith",
         "type": "S3",
         "config": {
           "mode": 0,
           "bucket": {
             "region": "us-east-1",
-            "name": "sigma-s3-thumb-input"
+            "name": "sigma-s3-thumb-output-udith"
           }
         }
       },
-      "s3sigmaS3ThumbOutput": {
-        "name": "s3sigmaS3ThumbOutput",
+      "s3sigmaS3ThumbInputUdith": {
+        "name": "s3sigmaS3ThumbInputUdith",
         "type": "S3",
         "config": {
           "mode": 0,
           "bucket": {
             "region": "us-east-1",
-            "name": "sigma-s3-thumb-output"
+            "name": "sigma-s3-thumb-input-udith"
           }
-        },
-        "globallyEditable": false
+        }
       }
     },
     "customTemplate": {
@@ -125,7 +124,7 @@
     "platform": "AWS",
     "language": "nodejs",
     "platformRegions": {},
-    "lastSave": 1585736714055
+    "lastSave": 1585737215749
   },
   "VCS_STATE": {
     "provider": "GitHub",

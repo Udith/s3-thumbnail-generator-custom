@@ -45,8 +45,8 @@ exports.handler = async (event) => {
     let imageObject;
     try {
         imageObject = await s3.getObject({
-            'Bucket': "sigma-s3-thumb-input",
-            'Key': srcKey
+            Bucket: "sigma-s3-thumb-input-udith",
+            Key: srcKey
         }).promise();
         console.log("Successfully retrieved image file:", srcKey);
 
@@ -71,12 +71,12 @@ exports.handler = async (event) => {
     console.log("Uploading the image to the destination bucket...");
     try {
         await s3.putObject({
-            "Body": data,
-            "Bucket": "sigma-s3-thumb-output",
-            "Key": dstKey,
-            "ACL": "public-read",
-            "Metadata": {
-                "Content-Type": contentType
+            Bucket: "sigma-s3-thumb-output-udith",
+            Key: dstKey,
+            Body: data,
+            ACL: "public-read",
+            Metadata: {
+                'Content-Type': contentType
             }
         });
         console.log("Successfully uploaded image:", dstKey);
