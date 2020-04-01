@@ -5,17 +5,20 @@
 
 // Dependencies
 let AWS = require('aws-sdk');
-let async = require('async');
+// let async = require('async');
 let util = require('util');
 // Enable ImageMagick integration.
-let gm = require('gm').subClass({ imageMagick: true });
+// let gm = require('gm').subClass({ imageMagick: true });
+let sharp = require('sharp');
 
 // Get reference to S3 client.
 const s3 = new AWS.S3();
 
 // Constants
-const MAX_WIDTH = 100;
-const MAX_HEIGHT = 100;
+// const MAX_WIDTH = 100;
+// const MAX_HEIGHT = 100;
+// Width of the thumbnail. Resize will set height automatically to maintain aspect ratio.
+const THUMBNAIL_WIDTH = 200;
 
 exports.handler = async (event) => {
 
@@ -52,49 +55,11 @@ exports.handler = async (event) => {
         throw new Error(`Failed to retrieve image file: ${srcKey} due to ${err}`);
     }
 
-    let gmImageObject = gm(imageObject.Body);
-
-    // Infer the scaling factor to avoid stretching the image unnaturally.
-    console.log("Infering scaling factor and final dimensions...");
-    let size;
-    try {
-        size = await new Promise((resolve, reject) => {
-            gmImageObject.size((err, size) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    let scalingFactor = Math.min(
-                        MAX_WIDTH / size.width,
-                        MAX_HEIGHT / size.height
-                    );
-                    let width = scalingFactor * size.width;
-                    let height = scalingFactor * size.height;
-                    resolve({ width, height });
-                }
-            });
-        });
-        console.log("Successfully infered final dimensions", size);
-
-    } catch (err) {
-        console.log("Failed to infer final image dimensions", err);
-        throw new Error(`Failed to infer final image dimensions due to ${err}`);
-    }
-
-    // Transform the image buffer in memory.
-    console.log("Resizing the image...");
-
     let resizedImageContent;
     try {
-        resizedImageContent = await new Promise((resolve, reject) => {
-            gmImageObject.resize(size.width, size.height)
-                .toBuffer(imageType, (err, content) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(content);
-                    }
-                });
-        });
+        resizedImageContent = await sharp(imageObject.Body)
+            .resize(THUMBNAIL_WIDTH)
+            .toBuffer(imageType);
         console.log("Successfully resized image");
 
     } catch (err) {

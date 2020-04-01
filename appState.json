@@ -48,8 +48,8 @@
           "layers": []
         },
         "cursor": {
-          "lineNumber": 176,
-          "column": 10
+          "lineNumber": 69,
+          "column": 1
         }
       }
     },
@@ -83,7 +83,7 @@
       }
     },
     "customTemplate": {
-      "dialect": null,
+      "dialect": "CloudFormation",
       "definitions": null
     },
     "envVariables": [
@@ -105,15 +105,9 @@
           "dev": true,
           "notRemovable": false
         },
-        "async": {
-          "name": "async",
-          "version": "2.6.0",
-          "dev": false,
-          "language": "nodejs"
-        },
-        "gm": {
-          "name": "gm",
-          "version": "1.23.1",
+        "sharp": {
+          "name": "sharp",
+          "version": "0.25.2",
           "dev": false,
           "language": "nodejs"
         }
@@ -131,12 +125,12 @@
     "platform": "AWS",
     "language": "nodejs",
     "platformRegions": {},
-    "lastSave": 1585656812513
+    "lastSave": 1585736714055
   },
   "VCS_STATE": {
     "provider": "GitHub",
     "repo": {
-      "name": "s3-thumbnail-generator",
+      "name": "s3-thumbnail-generator-custom",
       "url": "https://github.com/Udith/s3-thumbnail-generator-custom"
     }
   }
