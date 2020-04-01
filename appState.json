@@ -137,7 +137,7 @@
     "provider": "GitHub",
     "repo": {
       "name": "s3-thumbnail-generator",
-      "url": "https://github.com/Udith/s3-thumbnail-generator"
+      "url": "https://github.com/Udith/s3-thumbnail-generator-custom"
     }
   }
 }
